@@ -1,0 +1,44 @@
+export class ParaRomano {
+    static readonly VALORES: number[] = [
+        1000000, 900000, 500000, 400000, 100000, 90000, 50000, 40000, 10000, 9000, 5000, 4000, 1000,
+        900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1
+    ];
+    static readonly SIMBOLOS: string[] = [
+        '_M',
+        '_C_M',
+        '_D',
+        '_C_D',
+        '_C',
+        '_X_C',
+        '_L',
+        '_X_L',
+        '_X',
+        '_I_X',
+        '_V',
+        '_I_V',
+        'M',
+        'CM',
+        'D',
+        'CD',
+        'C',
+        'XC',
+        'L',
+        'XL',
+        'X',
+        'IX',
+        'V',
+        'IV',
+        'I'
+    ];
+
+    static deDecimal(numero: number): string {
+        let resultado: string = '';
+        for (let i = 0; i < ParaRomano.VALORES.length; i++) {
+            while (numero >= ParaRomano.VALORES[i]) {
+                numero = numero - ParaRomano.VALORES[i];
+                resultado = resultado + ParaRomano.SIMBOLOS[i];
+            }
+        }
+        return resultado;
+    }
+}
