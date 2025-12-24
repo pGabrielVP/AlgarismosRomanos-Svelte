@@ -1,56 +1,53 @@
 export class DeRomano {
     static readonly ROMAN_DECIMAL_MAP: Map<string, number> = new Map([
-        ['I', 1],
-        ['V', 5],
-        ['X', 10],
-        ['L', 50],
-        ['C', 100],
-        ['D', 500],
-        ['M', 1000],
-        ['_I', 1000],
-        ['_V', 5000],
-        ['_X', 10000],
-        ['_L', 50000],
-        ['_C', 100000],
-        ['_D', 500000],
-        ['_M', 1000000]
+        ["I", 1],
+        ["IV", 4],
+        ["V", 5],
+        ["IX", 9],
+        ["X", 10],
+        ["XL", 40],
+        ["L", 50],
+        ["XC", 90],
+        ["C", 100],
+        ["CD", 400],
+        ["D", 500],
+        ["CM", 900],
+        ["M", 1000],
+        ["_I", 1000],
+        ["_I_V", 4000],
+        ["_V", 5000],
+        ["_I_X", 9000],
+        ["_X", 10000],
+        ["_X_L", 40000],
+        ["_L", 50000],
+        ["_X_C", 90000],
+        ["_C", 100000],
+        ["_C_D", 400000],
+        ["_D", 500000],
+        ["_C_M", 900000],
+        ["_M", 1000000]
     ]);
 
     static paraDecimal(algarismos: string): number {
         let total = 0;
-        for (let i = 0; i < algarismos.length; i++) {
-            if (
-                algarismos.charAt(i) === '_' &&
-                i + 3 < algarismos.length &&
-                algarismos.charAt(i + 2) === '_'
-            ) {
-                const pair = algarismos.charAt(i) + algarismos.charAt(i + 1);
-                const lookaheadPair = algarismos.charAt(i + 2) + algarismos.charAt(i + 3);
-                const currentValue = DeRomano.ROMAN_DECIMAL_MAP.get(pair) ?? 0;
-                const nextValue = DeRomano.ROMAN_DECIMAL_MAP.get(lookaheadPair) ?? 0;
-                if (nextValue > currentValue) {
-                    total += nextValue - currentValue;
-                    i = i + 3;
-                } else {
-                    total += currentValue;
-                    i = i + 1;
-                }
-            } else if (algarismos.charAt(i) === '_') {
-                const pair = algarismos.charAt(i) + algarismos.charAt(i + 1);
-                const currentValue = DeRomano.ROMAN_DECIMAL_MAP.get(pair) ?? 0;
-                total += currentValue;
-                i = i + 1;
-            } else {
-                const currentValue = DeRomano.ROMAN_DECIMAL_MAP.get(algarismos.charAt(i)) ?? 0;
-                const nextValue =
-                    i + 1 < algarismos.length ? (DeRomano.ROMAN_DECIMAL_MAP.get(algarismos.charAt(i + 1)) ?? 0) : 0;
-                if (nextValue > currentValue) {
-                    total += nextValue - currentValue;
-                    i++;
-                } else {
-                    total += currentValue;
-                }
-            }
+        let indiceCaractereAtual = 0;
+        while (indiceCaractereAtual < algarismos.length) {
+          let vinculumPair: boolean = algarismos.charAt(indiceCaractereAtual) === '_'
+            && indiceCaractereAtual + 3 < algarismos.length
+            && algarismos.charAt(indiceCaractereAtual + 2) === '_'
+            && ROMAN_DECIMAL_MAP.has(algarismos.substring(indiceCaractereAtual, indiceCaractereAtual + 4));
+          let vinculumSingle__NormalPair: boolean = algarismos.charAt(indiceCaractereAtual) == '_'
+            || indiceCaractereAtual + 1 < algarismos.length
+            && ROMAN_DECIMAL_MAP.has(algarismos.substring(indiceCaractereAtual, indiceCaractereAtual + 2));
+    
+          let key: string = vinculumPair
+            ? algarismos.substring(indiceCaractereAtual, indiceCaractereAtual + 4)
+            : vinculumSingle__NormalPair
+              ? algarismos.substring(indiceCaractereAtual, indiceCaractereAtual + 2)
+              : algarismos.substring(indiceCaractereAtual, indiceCaractereAtual + 1);
+    
+          indiceCaractereAtual += key.length;
+          total += ROMAN_DECIMAL_MAP.get(key)!;
         }
         return total;
     }
